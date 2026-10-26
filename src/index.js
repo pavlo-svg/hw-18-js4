@@ -6,12 +6,13 @@ import { deleteStudents } from "./js/deleteStudents";
 
 const tbodyRef = document.querySelector("tbody");
 const formRef = document.querySelector("#add-student-form");
-const btnRef = document.querySelector("#add-student-btn");
+const btnRef = document.querySelector("#get-students-btn");
 
 let currentId = null;
 
-btnRef.addEventListener("click", (evt) => {
-  renderList();
+btnRef.addEventListener("click", async (evt) => {
+  evt.preventDefault();
+  await renderList();
 });
 
 formRef.addEventListener("submit", async (evt) => {
@@ -27,13 +28,14 @@ formRef.addEventListener("submit", async (evt) => {
     isEnrolled: element.isEnrolled.checked,
   };
 
-  if (currentId === null) {
-    await addStudents(studentData);
-    afterRender();
-    return;
-  }
+if (currentId === null) {
+  await addStudents(studentData);
+} else {
   await updateStudents(studentData, currentId);
   currentId = null;
+}
+
+afterRender();
 });
 async function renderList() {
   try {
